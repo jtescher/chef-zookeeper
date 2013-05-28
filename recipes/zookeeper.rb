@@ -41,8 +41,13 @@ bash "untar zookeeper" do
 end
 
 bash "copy zk root" do
-  user node[:exhibitor][:user]
+  user "root"
   cwd "#{Chef::Config[:file_cache_path]}"
   code %(cp -r #{zk_basename} #{node[:zookeeper][:install_dir]}/)
   creates "#{node[:zookeeper][:install_dir]}/#{zk_basename}"
+end
+
+directory "#{node[:zookeeper][:install_dir]}/#{zk_basename}" do
+  owner node[:exhibitor][:user]
+  recursive true
 end
